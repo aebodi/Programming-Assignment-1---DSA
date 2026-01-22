@@ -4,13 +4,11 @@ class ActivityRegister:
         self.__time_goal__ = 30  # in minutes
 
     def add_activity(self, activity, time_spent):
-        try:
-            self.check_input(time_spent)
-        except TypeError:
-            raise TypeError("Time must be a number")
-        except ValueError:
-            raise ValueError("Time cannot be negative")
-        self.activities[activity] = time_spent
+        self.check_input(time_spent)
+        if activity in self.activities:
+            self.activities[activity] += time_spent
+        else:
+            self.activities[activity] = time_spent
 
     def get_activities(self):
         return self.activities
@@ -19,13 +17,13 @@ class ActivityRegister:
         return sum(self.activities.values())
 
     def check_input(self, input_value):
-        if input_value < 0:
-            raise ValueError("Time cannot be negative")
         if not isinstance(input_value, (int, float)):
             raise TypeError("Time must be a number")
+        if input_value < 0:
+            raise ValueError("Time cannot be negative")
 
     def check_goal(self, goal_time):
-        total = self.total_time()
+        total = self.get_total_time()
         return total >= goal_time
 
     def reset(self):
